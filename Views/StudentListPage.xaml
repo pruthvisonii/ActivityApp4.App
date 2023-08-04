@@ -2,73 +2,90 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:ActivityApp4.Models"
-             xmlns:searchHandlers="clr-namespace:ActivityApp4.SearchHandlers"
              xmlns:viewModels="clr-namespace:ActivityApp4.ViewModels"
              x:DataType="viewModels:StudentListPageViewModel"
              x:Class="ActivityApp4.Views.StudentListPage"
              Title="Student List">
-    <Shell.SearchHandler>
-        <searchHandlers:StudentSearchHandler 
-            Placeholder="Hledat podle jmena"
-            ShowsResults="True"
-            QueryIcon="search"
-            ClearIcon="clear"
-            NavigationRoute="AddUpdateStudentDetail"
-            Students="{x:Static viewModels:StudentListPageViewModel.StudentsListForSearch}">
-            <searchHandlers:StudentSearchHandler.ItemTemplate>
-                <DataTemplate x:DataType="models:StudentModel">
-                    <Grid Margin="5" RowDefinitions="Auto" ColumnDefinitions="40,Auto">
-                        <Image Grid.Row="0" Grid.Column="0" Source="user" HeightRequest="35" WidthRequest="35" />
-                        <Label Grid.Row="0" Grid.Column="1" Text="{Binding FullName}" FontSize="18" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                    </Grid>
-                </DataTemplate>
-            </searchHandlers:StudentSearchHandler.ItemTemplate>
-        </searchHandlers:StudentSearchHandler>
-    </Shell.SearchHandler>
-    <StackLayout Margin="10">
-        <Label  Text="List Student" FontSize="28"/>
-        <Button Text="Add Student" Command="{Binding AddUpdateStudentCommand}" HorizontalOptions="EndAndExpand" />
-        <Button Text="Add Course" Command="{Binding AddCourseCommand}" HorizontalOptions="EndAndExpand" />
-        <Button Text="View Courses" Command="{Binding ViewCoursesCommand}" HorizontalOptions="EndAndExpand" />
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="AccentColor">#0078D4</Color>
+            <Color x:Key="TextColor">#333333</Color>
+            <Style x:Key="HeaderLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="24" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource AccentColor}" />
+                <Setter Property="Margin" Value="0,16,0,0" />
+            </Style>
+            <Style x:Key="SubHeaderLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+                <Setter Property="Margin" Value="0,8,0,0" />
+            </Style>
+            <Style x:Key="ActionButtonStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource AccentColor}" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="8" />
+            </Style>
+            <Style x:Key="StudentNameStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource AccentColor}" />
+            </Style>
+            <Style x:Key="StudentEmailStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+            </Style>
+            <Style x:Key="SwipeItemLabelStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+            </Style>
+            <Style x:Key="SwipeItemViewStyle" TargetType="SwipeItemView">
+                <Setter Property="BackgroundColor" Value="{StaticResource AccentColor}" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
-        <CollectionView ItemsSource="{Binding Students}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:StudentModel">
-                    <SwipeView>
-                        <SwipeView.LeftItems>
-                            <SwipeItems>
-                                <SwipeItemView>
-                                    <VerticalStackLayout  BackgroundColor="LightBlue">
-                                        <Label Text="Upravit" 
-                                               HorizontalTextAlignment="Center" 
-                                               VerticalTextAlignment="Center" FontAttributes="Bold" TextColor="White" />
-                                    </VerticalStackLayout>
-                                </SwipeItemView>
-                                <SwipeItemView>
-                                    <VerticalStackLayout BackgroundColor="Red">
-                                        <Label Text="Vymazat" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontAttributes="Bold" TextColor="White" />
-                                    </VerticalStackLayout>
-                                </SwipeItemView>
-                            </SwipeItems>
-                        </SwipeView.LeftItems>
-                        <Frame Margin="10" Padding="10">
-                            <VerticalStackLayout>
-                                <HorizontalStackLayout Spacing="10">
-                                    <Label Text="{Binding FirstName}" FontSize="18" FontAttributes="Bold" />
-                                    <Label Text="{Binding LastName}" FontSize="18" FontAttributes="Bold" />
-                                </HorizontalStackLayout>
-                                <Label Text="{Binding Email}" />
-                            </VerticalStackLayout>
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type viewModels:StudentListPageViewModel}},Path=DisplayActionCommand}"
-                                                  CommandParameter="{Binding .}" />
-                            </Frame.GestureRecognizers>
-                        </Frame>
-                    </SwipeView>
+    <ContentPage.Content>
+        <StackLayout Margin="10">
+            <Label Text="List of Students" Style="{StaticResource HeaderLabelStyle}" />
+            <StackLayout Orientation="Horizontal" Spacing="8">
+                <Button Text="Add Student" Command="{Binding AddUpdateStudentCommand}" Style="{StaticResource ActionButtonStyle}" />
+                <Button Text="Add Course" Command="{Binding AddCourseCommand}" Style="{StaticResource ActionButtonStyle}" />
+                <Button Text="View Courses" Command="{Binding ViewCoursesCommand}" Style="{StaticResource ActionButtonStyle}" />
+            </StackLayout>
 
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </StackLayout>
+            <CollectionView ItemsSource="{Binding Students}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:StudentModel">
+                        <SwipeView>
+                            <SwipeView.LeftItems>
+                                <SwipeItems>
+                                    <SwipeItemView Style="{StaticResource SwipeItemViewStyle}">
+                                        <Label Text="Edit" Style="{StaticResource SwipeItemLabelStyle}" />
+                                    </SwipeItemView>
+                                    <SwipeItemView Style="{StaticResource SwipeItemViewStyle}">
+                                        <Label Text="Delete" Style="{StaticResource SwipeItemLabelStyle}" />
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+                            <Frame Margin="10" Padding="10">
+                                <StackLayout>
+                                    <Label Text="{Binding FirstName}" Style="{StaticResource StudentNameStyle}" />
+                                    <Label Text="{Binding LastName}" Style="{StaticResource StudentNameStyle}" />
+                                    <Label Text="{Binding Email}" Style="{StaticResource StudentEmailStyle}" />
+                                </StackLayout>
+                                <Frame.GestureRecognizers>
+                                    <!-- Implement the gesture recognizer here if needed -->
+                                </Frame.GestureRecognizers>
+                            </Frame>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>

@@ -1,12 +1,12 @@
 ﻿using SQLite;
-using SQLiteDemo.Models;
+using ActivityApp4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SQLiteDemo.Services
+namespace ActivityApp4.Services
 {
     public class StudentService : IStudentService
     {

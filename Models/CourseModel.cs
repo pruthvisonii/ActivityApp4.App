@@ -1,12 +1,11 @@
 ﻿using SQLite;
 
-namespace SQLiteDemo.Models
+namespace ActivityApp4.Models
 {
     public class CourseModel
     {
-        [PrimaryKey, AutoIncrement]
-        public int CourseID { get; set; }
-
-        public string CourseName { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }
